@@ -38,9 +38,9 @@ function window_check(){
 
 function launch_all_zig(){
     if [ "$1" == "first" ]; then
-        tmux send-keys -t $session_name:0.0 "$script_command ${raxinfo[$i]}.$window_number-$current_panes" C-m
+        tmux send-keys -t $session_name:0.0 "$script_command ${raxinfo[$i]}" C-m
     else
-        tmux send-keys $tmux_options "$script_command ${raxinfo[$i]}.$window_number-$current_panes" C-m
+        tmux send-keys $tmux_options "$script_command ${raxinfo[$i]}" C-m
     fi
 }
 
