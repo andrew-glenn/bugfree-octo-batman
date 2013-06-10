@@ -6,11 +6,9 @@ session_name="rax"
 max_win_panes="8"
 window_number="0"
 script_command="cd /tmp/tmux-test; touch"
-#scropt_command="ht"
+#script_command="ht"
 
 ## Do not edit below this line.
-raxinfo=($(cat list))
-total_panes=${#raxinfo[@]}
 current_panes="1"
 declare -A layout_array=(['4x4']='4492,96x11,0,0[96x2,0,0{48x2,0,0,17,47x2,49,0,24},96x2,0,3{48x2,0,3,18,47x2,49,3,23},96x2,0,6{48x2,0,6,19,47x2,49,6,22},96x2,0,9{48x2,0,9,20,47x2,49,9,21}]' )
 
@@ -40,7 +38,7 @@ function launch_all_zig(){
     if [ "$1" == "first" ]; then
         tmux send-keys -t $session_name:0.0 "$script_command ${raxinfo[$i]}" C-m
     else
-        tmux send-keys $tmux_options "$script_command ${raxinfo[$i]}" C-m
+        tmux send-keys "$script_command ${raxinfo[$i]}" C-m
     fi
 }
 
@@ -71,13 +69,16 @@ function usage(){
     exit 1
 }
 
-OPTERR=0
+if [ $# -eq 0 ]; then
+    usage
+fi
 
+OPTERR=0
 while getopts "s:l:"  OPTION; do 
     case "$OPTION" in
         s) external_script="${OPTARG}";;
-        l) external_list="${OPTARG}";;
-        \?) usage;; 
+        l) external_list="${OPTARG}"; total_panes=${#raxinfo[@]};;
+        ?) usage;; 
     esac
 done
 
@@ -112,8 +113,8 @@ if [ $debug ]; then
     echo "current_panes => $current_panes"
 fi
 
-
-for i in `seq 1 $((total_panes -1))`; do
+total_panes=${#raxinfo[@]}
+for i in $(seq 1 $((total_panes -1))); do
     if [[ $current_panes -eq 1 ]]; then
         launch_all_zig "first"
     fi
