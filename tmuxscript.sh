@@ -5,8 +5,8 @@
 session_name="rax"
 max_win_panes="8"
 window_number="0"
-script_command="cd /tmp/tmux-test; touch"
-#script_command="ht"
+#script_command="cd /tmp/tmux-test; touch"
+script_command="ht --no-sqlite"
 
 ## Do not edit below this line.
 current_panes="1"
