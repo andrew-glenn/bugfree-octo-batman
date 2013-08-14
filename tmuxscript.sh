@@ -1,6 +1,30 @@
 #!/bin/bash
-
-## Things you can change. 
+# 
+### Begin Software License.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the GNU General Public License as published by the
+# Free Software Foundation, either version 3 of the License, or (at your option)
+# any later version.
+#
+# http://www.gnu.org/licenses/gpl-3.0.html
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# General Public License for more details.
+#
+# No Warranty or guarantee or suitability exists for the software.
+# Use at your own risk. The author is not responsible if your system breaks.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+### End Software License.
+# v: 0.2
+# r: 2013.08.14
+#
+# Things you can change. 
 #debug=true
 session_name="rax"
 max_win_panes="8"
@@ -57,7 +81,7 @@ function set_layout(){
 function usage(){
     echo "Usage:"
     echo
-    echo "$0 [-l External List] [-s External Script]"
+    echo "$0 [-l External List] [-s External Script] [-d Device List, space seperated]"
     echo 
     echo "If no options are passed, $0 will look for 'list' within the current directory, and will execute as"
     echo "defined in the \$script_command variable at the top of the script."
@@ -73,8 +97,9 @@ if [ $# -eq 0 ]; then
 fi
 
 OPTERR=0
-while getopts "s:l:"  OPTION; do 
+while getopts "s:l:d:"  OPTION; do 
     case "$OPTION" in
+        d) server_list="${OPTARG}";;
         s) external_script="${OPTARG}";;
         l) external_list="${OPTARG}"; total_panes=${#raxinfo[@]};;
         ?) usage;; 
@@ -89,6 +114,8 @@ if [ -n "$external_list" ]; then
         echo "$external_list doesn't exist!"
         exit 1
     fi
+elif [ -n "$server_list" ]; then
+    raxinfo=($server_list)
 fi
 
 if [ -n "$external_script" ]; then
