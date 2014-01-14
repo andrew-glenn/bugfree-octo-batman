@@ -11,7 +11,7 @@ script_command="touch"
 current_panes="1"
 #declare -A layout_array=(['4x4']='4492,96x11,0,0[96x2,0,0{48x2,0,0,17,47x2,49,0,24},96x2,0,3{48x2,0,3,18,47x2,49,3,23},96x2,0,6{48x2,0,6,19,47x2,49,6,22},96x2,0,9{48x2,0,9,20,47x2,49,9,21}]' )
 
-text $TMUX
+test $TMUX
 if [ $? -eq 0 ]; then
     echo "You're in a TMUX session. This isn't advised."
     echo "Bad things may happen if you continue. "
