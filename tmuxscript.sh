@@ -1,11 +1,10 @@
 #!/bin/bash
-
 ## Things you can change. 
 #debug=true
-session_name="raxauto"
+session_name="tmux_auto"
 max_win_panes="12"
 window_number="0"
-script_command="touch"
+script_command="echo 'This is an example'"
 
 ## Do not edit below this line.
 current_panes="1"
@@ -35,9 +34,9 @@ function window_check(){
 function launch_all_zig(){
     if [ "$1" == "first" ]; then
         [ $i -eq 1 ]; i=0
-        tmux send-keys -t $session_name:0.0 "$script_command ${raxinfo[$i]}" C-m
+        tmux send-keys -t $session_name:0.0 "$script_command ${listinfo[$i]}" C-m
     else
-        tmux send-keys "$script_command ${raxinfo[$i]}" C-m
+        tmux send-keys "$script_command ${listinfo[$i]}" C-m
     fi
 }
 
@@ -73,7 +72,7 @@ OPTERR=0
 while getopts "tsn:l:"  OPTION; do 
     case "$OPTION" in
         s) external_script="${OPTARG}";;
-        l) external_list="${OPTARG}"; total_panes=${#raxinfo[@]};;
+        l) external_list="${OPTARG}"; total_panes=${#listinfo[@]};;
         n) custom_session_name="${OPTARG}";;
         t) this_tmux_window=true;;
         ?) usage;; 
@@ -83,9 +82,9 @@ done
 
 if [ -n "$external_list" ]; then 
     if [ -e "$external_list" ]; then  
-        raxinfo=($(cat $external_list)); 
+        listinfo=($cat $external_list); 
     else
-        raxinfo=$external_list
+        listinfo=$external_list
     fi
 fi
 
@@ -112,7 +111,7 @@ if [ $? -eq 1 ]; then
     tmux new-session -s $session_name -d 
 fi
 
-total_panes=${#raxinfo[@]}
+total_panes=${#listinfo[@]}
 for i in $(seq 0 $((total_panes -1))); do
     if [[ $current_panes -eq 1 ]]; then
         launch_all_zig "first"
